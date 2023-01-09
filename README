@@ -1,0 +1,10 @@
+# Para rodar o projeto:
+
+## Crianção de uma venv
+  - python -m venv venvbd
+## Ativar venv
+  - .\venvBD\Scripts\activate.ps1
+
+## Instalar as LIBS
+### Django
+  - pip install django
