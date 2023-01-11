@@ -23,6 +23,14 @@
   <body>
     <div class="container containerMargin">
       <h1>Trabalho Final de Banco de Dados II!</h1>
+      <ul>
+      {% for t in teste %}
+        
+          <li>{{t.desc_problema}}</li>
+          <li>{{t.usuario_cpf}}</li>
+        
+
+      {% endfor %}</ul>
     </div>
 
     <script
