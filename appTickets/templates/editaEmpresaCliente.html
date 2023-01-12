@@ -1,0 +1,37 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-baseline">
+    <form action="{% url 'empresasClientes' %}" method="post">
+        {% csrf_token %}           
+        <button type="submit" class="btn fs-4"><i class="bi bi-arrow-left-square-fill"></i></button>
+    </form>
+    <h5 class="mt-5 mb-4">Empresas Clientes</h5>
+</div>
+    {% for item in lista %}
+        <form action="{% url 'salvarEmpresa' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">CNPJ</label>
+                <input type="text" disabled class="form-control" id="exampleInputEmail1" name="cnpj" value="{{item.cnpj}}">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="exampleInputPassword1" name="nome" value="{{item.nome}}">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword2" class="form-label">Endereço</label>
+                <input type="text" class="form-control" id="exampleInputPassword2" name="endereco" value="{{item.endereco}}">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword3" class="form-label">Telefone</label>
+                <input type="text" class="form-control" id="exampleInputPassword3" name="telefone" value="{{item.telefone}}">
+            </div>              
+            <button type="submit" class="btn btn-dark">Editar</button>
+        </form>
+    {% endfor %}
+   
+
+{% endblock %} 

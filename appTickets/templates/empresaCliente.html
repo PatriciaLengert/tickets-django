@@ -1,0 +1,84 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-baseline">
+    <h3 class="mt-5 mb-4">Empresas Clientes</h3>
+    <button class="btn fs-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-plus-square-fill"></i></button>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="p-3 mb-2 text-light bg-dark lh-1">
+                        <th class="">CNPJ</th>
+                        <th class="">Nome</th>
+                        <th class="">Endereço</th>
+                        <th class="">Telefone</th>
+                        <th class="text-center" colspan="2">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in lista %} 
+                        <tr class="lh-1">
+                            <td class="">{{item.cnpj}}</td> 
+                            <td class=" ">{{item.nome}}</td>
+                            <td class=" ">{{item.endereco}}</td>
+                            <td class=" ">{{item.telefone}}</td>
+                            <form action="{% url 'editaEmpresa' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="cnpj" value="{{ item.cnpj }}">
+                                <td><button type="submit" class="btn"><i class="bi bi-pencil-square"></i></button></td>
+                            </form> 
+                            <form action="{% url 'deletaEmpresa' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="cnpj" value="{{ item.cnpj }}">
+                                <td><button type="submit" class="btn"><i class="bi bi-trash3-fill"></i></button></td>
+                            </form>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Adicionar nova Empresa Cliente</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'cadastraEmpresa' %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">CNPJ</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1" name="cnpj">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Nome</label>
+                  <input type="text" class="form-control" id="exampleInputPassword1" name="nome">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword2" class="form-label">Endereço</label>
+                    <input type="text" class="form-control" id="exampleInputPassword2" name="endereco">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword3" class="form-label">Telefone</label>
+                    <input type="text" class="form-control" id="exampleInputPassword3" name="telefone">
+                </div>              
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="submit" class="btn btn-dark">Cadastrar </button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %} 
