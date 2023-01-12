@@ -4,7 +4,10 @@
 
 <h1 class="mt-2">.</h1>
 <div class="d-flex align-items-baseline">
-    <h3 class="mt-5 mb-4">Empresas Clientes</h3>
+    <div>
+        <h3 class="mt-5">Usuários da Empresa</h3>
+        <h5 class="mt-2 mb-4">{{cnpj}}</h5>
+    </div>
     <button class="btn fs-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-plus-square-fill"></i></button>
 </div>
 <div class="row">
@@ -13,39 +16,38 @@
             <table class="table table-striped">
                 <thead>
                     <tr class="p-3 mb-2 text-light bg-dark lh-1">
-                        <th class="">CNPJ</th>
+                        <th class="">CPF</th>
                         <th class="">Nome</th>
-                        <th class="">Endereço</th>
-                        <th class="">Telefone</th>
-                        <th class="text-center" colspan="3">Ações</th>
+                        <th class="">Cargo</th>
+                        <th class="">Setor</th>
+                        <th class="text-center" colspan="2">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in lista %} 
                         <tr class="lh-1">
-                            <td class="">{{item.cnpj}}</td> 
+                            <td class="">{{item.cpf}}</td> 
                             <td class=" ">{{item.nome}}</td>
-                            <td class=" ">{{item.endereco}}</td>
-                            <td class=" ">{{item.telefone}}</td>
-                            <form action="{% url 'editaEmpresa' %}" method="post">
+                            <td class=" ">{{item.cargo}}</td>
+                            <td class=" ">{{item.setor}}</td>
+                            <form action="{% url 'editaOperador' %}" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="cnpj" value="{{ item.cnpj }}">
+                                <input type="hidden" name="matricula" value="{{ item.matricula }}">
                                 <td><button type="submit" class="btn"><i class="bi bi-pencil-square"></i></button></td>
                             </form> 
-                            <form action="{% url 'deletaEmpresa' %}" method="post">
+                            <form action="{% url 'deletaOperador' %}" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="cnpj" value="{{ item.cnpj }}">
+                                <input type="hidden" name="matricula" value="{{ item.matricula }}">
                                 <td><button type="submit" class="btn"><i class="bi bi-trash3-fill"></i></button></td>
-                            </form>
-                            <form action="{% url 'usuariosEmpresa' %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="cnpj" value="{{ item.cnpj }}">
-                                <td><button type="submit" class="btn"><i class="bi bi-person-plus-fill"></i></button></td>
                             </form>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            <form action="{% url 'empresasClientes' %}" method="post">
+                {% csrf_token %}           
+                <button type="submit" class="btn fs-3"><i class="bi bi-arrow-left-square-fill"></i></button>
+            </form>
         </div>
     </div>
 </div>
@@ -54,27 +56,28 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Adicionar nova Empresa Cliente</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Adicionar novo Usuário</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form action="{% url 'cadastraEmpresa' %}" method="post">
+            <form action="{% url 'cadastraUsuario' %}" method="post">
                 {% csrf_token %}
+                <input type="hidden" name="cnpj" value="{{ item.cnpj }}">
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">CNPJ</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" name="cnpj">
+                  <label for="exampleInputEmail1" class="form-label">CPF</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1" name="cpf">
                 </div>
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Nome</label>
                   <input type="text" class="form-control" id="exampleInputPassword1" name="nome">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputPassword2" class="form-label">Endereço</label>
-                    <input type="text" class="form-control" id="exampleInputPassword2" name="endereco">
+                    <label for="exampleInputPassword2" class="form-label">Cargo</label>
+                    <input type="text" class="form-control" id="exampleInputPassword2" name="cargo">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputPassword3" class="form-label">Telefone</label>
-                    <input type="text" class="form-control" id="exampleInputPassword3" name="telefone">
+                    <label for="exampleInputPassword3" class="form-label">Setor</label>
+                    <input type="text" class="form-control" id="exampleInputPassword3" name="setor">
                 </div>              
             </div>
             <div class="modal-footer">

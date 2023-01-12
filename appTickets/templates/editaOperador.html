@@ -4,18 +4,18 @@
 
 <h1 class="mt-2">.</h1>
 <div class="d-flex align-items-baseline">
-    <form action="{% url 'empresasClientes' %}" method="post">
+    <form action="{% url 'operador' %}" method="post">
         {% csrf_token %}           
         <button type="submit" class="btn fs-4"><i class="bi bi-arrow-left-square-fill"></i></button>
     </form>
-    <h5 class="mt-5 mb-4">Edita Empresa Cliente</h5>
+    <h5 class="mt-5 mb-4">Edita Operador</h5>
 </div>
     {% for item in lista %}
-        <form action="{% url 'salvarEmpresa' %}" method="post">
+        <form action="{% url 'salvarOperador' %}" method="post">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">CNPJ</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="cnpj" value="{{item.cnpj}}">
+                <label for="exampleInputEmail1" class="form-label">Matrícula</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="matricula" value="{{item.matricula}}">
                 <div id="emailHelp" class="form-text">Não alterar</div>
             </div>
             <div class="mb-3">
@@ -23,8 +23,8 @@
                 <input type="text" class="form-control" id="exampleInputPassword1" name="nome" value="{{item.nome}}">
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword2" class="form-label">Endereço</label>
-                <input type="text" class="form-control" id="exampleInputPassword2" name="endereco" value="{{item.endereco}}">
+                <label for="exampleInputPassword2" class="form-label">Cargo</label>
+                <input type="text" class="form-control" id="exampleInputPassword2" name="cargo" value="{{item.cargo}}">
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword3" class="form-label">Telefone</label>

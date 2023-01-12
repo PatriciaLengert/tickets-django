@@ -142,3 +142,168 @@ def deletaEmpresaCliente(request):
     deleteEmpresaCliente(cnpj)
 
     return redirect('/empresasClientes')
+
+#----------------Usuário---------------    
+# ------------SELECT---------------
+def getUsuarioEmpresa(cnpj:str):
+    sql = f"""select * from usuario where empresa_cliente_cnpj ='{cnpj}' order by nome
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            rs =  dictfetchall(cursor)
+            cursor.close()
+            return rs
+        except Exception as e:
+            cursor.close()
+
+def usuariosEmpresa(request):
+    cnpj = request.POST.get('cnpj')
+    res = getUsuarioEmpresa(cnpj)
+
+    dados = {
+        'lista': res,
+        'cnpj': cnpj
+    }
+
+    return render(request, 'usuariosEmpresa.html', dados)
+
+#INSERT AINDA NÃO FUNCIONAAA---------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
+
+# ------------INSERT---------------
+def setUsuario(cpf, nome, cargo, setor, cnpj:str):
+    sql = f"""INSERT INTO usuario (cpf, nome, cargo, setor, empresa_cliente_cnpj)
+            VALUES ('{cpf}', "{nome}", "{cargo}", "{setor}", "{cnpj}"); 
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            cursor.close()
+            return 
+        except Exception as e:
+            cursor.close()   
+
+def cadastraUsuario(request):
+    cpf = request.POST.get('cpf')
+    nome = request.POST.get('nome')
+    cargo = request.POST.get('cargo')
+    setor = request.POST.get('setor')
+    cnpj = request.POST.get('cnpj')
+
+    setUsuario(cpf, nome, cargo, setor, cnpj)
+
+    return redirect('/usuariosEmpresa')
+
+# ----------Operador------------------
+
+# ------------SELECT---------------
+def getOperador():
+    sql = f"""select * from operador order by matricula
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            rs =  dictfetchall(cursor)
+            cursor.close()
+            return rs
+        except Exception as e:
+            cursor.close()
+
+def operador(request):
+    res = getOperador()
+
+    dados = {
+        'lista': res
+    }
+
+    return render(request, 'operador.html', dados)
+    
+# ------------INSERT---------------
+def setOperador(matricula, nome, cargo, telefone:str):
+    sql = f"""INSERT INTO operador (matricula, nome, cargo, telefone)
+            VALUES ('{matricula}', "{nome}", "{cargo}", "{telefone}"); 
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            cursor.close()
+            return 
+        except Exception as e:
+            cursor.close()   
+
+def cadastraOperador(request):
+    matricula = request.POST.get('matricula')
+    nome = request.POST.get('nome')
+    cargo = request.POST.get('cargo')
+    telefone = request.POST.get('telefone')
+
+    setOperador(matricula, nome, cargo, telefone)
+
+    return redirect('/operador')
+
+# ------------UPDATE---------------
+def updateOperador(matricula, nome, cargo, telefone:str):
+    sql = f"""update operador set nome = "{nome}", cargo = "{cargo}", telefone = "{telefone}" where matricula = '{matricula}'; 
+            """  
+    print(sql)      
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            cursor.close()
+            return 
+        except Exception as e:
+            cursor.close()   
+
+def getOperadorUpdate(matricula:str):
+    sql = f"""select * from operador where matricula = '{matricula}'
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            rs =  dictfetchall(cursor)
+            cursor.close()
+            return rs
+        except Exception as e:
+            cursor.close()
+
+def editaOperador(request):
+    matricula = request.POST.get('matricula')
+
+    res = getOperadorUpdate(matricula)
+
+    dados = {
+        'lista': res
+    }
+
+    return render(request, 'editaOperador.html', dados)
+
+def salvarOperador(request):
+    matricula = request.POST.get('matricula')
+    nome = request.POST.get('nome')
+    cargo = request.POST.get('cargo')
+    telefone = request.POST.get('telefone')
+
+    print(matricula)
+    updateOperador(matricula, nome, cargo, telefone)
+
+    return redirect('/operador')
+
+# ------------DELETE---------------
+def deleteOperador(matricula:str):
+    sql = f"""delete from operador where matricula = '{matricula}'; 
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            cursor.close()
+            return 
+        except Exception as e:
+            cursor.close()   
+
+def deletaOperador(request):
+    matricula = request.POST.get('matricula')
+
+    deleteOperador(matricula)
+
+    return redirect('/operador')
