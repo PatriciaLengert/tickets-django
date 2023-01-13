@@ -21,16 +21,57 @@ def getTickets():
         except Exception as e:
             cursor.close()
 
-def index(request):
-    teste = getTickets()
+def tickets(request):
+    ticket = getTickets()
 
-    #print(teste)
+    #print(ticket)
 
     dados = {
-        'teste': teste
+        'lista': ticket
     }
 
-    return render(request, 'index.html', dados)
+    return render(request, 'tickets.html', dados)
+
+def getTicketCode(code:int):
+    sql = f"""SELECT *
+                FROM tickets t
+                left join infra i
+                    on t.cod_ticket = i.tickets_cod_ticket
+                left join hospedagem_site hs
+                    on t.cod_ticket = hs.tickets_cod_ticket
+                left join hospedagem_email he
+                    on t.cod_ticket = he.tickets_cod_ticket
+                where cod_ticket = {code}
+                order by cod_ticket
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            rs =  dictfetchall(cursor)
+            cursor.close()
+            return rs
+        except Exception as e:
+            cursor.close()
+
+def verTickets(request):
+    code = request.POST.get('code')
+
+    ticket = getTicketCode(code)
+    tipo = ''
+
+    for t in ticket:
+        if t['endereco_emal'] != None:
+            tipo = 'email'
+        elif t['dominio'] != None:
+            tipo = 'site'
+        elif t['sistema_op'] != None:
+            tipo = 'infra'
+        else:
+            tipo = 'ST'
+
+    print(tipo)
+
+    return redirect('/tickets')
 
 # ----------Empresa cliente------------------
 
@@ -168,9 +209,6 @@ def usuariosEmpresa(request):
 
     return render(request, 'usuariosEmpresa.html', dados)
 
-#INSERT AINDA NÃO FUNCIONAAA---------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------------
-
 # ------------INSERT---------------
 def setUsuario(cpf, nome, cargo, setor, cnpj:str):
     sql = f"""INSERT INTO usuario (cpf, nome, cargo, setor, empresa_cliente_cnpj)
@@ -193,7 +231,97 @@ def cadastraUsuario(request):
 
     setUsuario(cpf, nome, cargo, setor, cnpj)
 
-    return redirect('/usuariosEmpresa')
+    res = getUsuarioEmpresa(cnpj)
+
+    dados = {
+        'lista': res,
+        'cnpj': cnpj
+    }
+
+    return render(request, 'usuariosEmpresa.html', dados)
+
+# ------------UPDATE---------------
+def updateUsuario(cpf, nome, cargo, setor:str):
+    sql = f"""update usuario set nome = "{nome}", cargo = "{cargo}", setor = "{setor}" where cpf = '{cpf}'; 
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            cursor.close()
+            return 
+        except Exception as e:
+            cursor.close()   
+
+def getUsuarioUpdate(cpf:str):
+    sql = f"""select * from usuario where cpf = '{cpf}'
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            rs =  dictfetchall(cursor)
+            cursor.close()
+            return rs
+        except Exception as e:
+            cursor.close()
+
+def editaUsuario(request):
+    cpf = request.POST.get('cpf')
+    cnpj = request.POST.get('cnpj')
+
+    res = getUsuarioUpdate(cpf)
+
+    dados = {
+        'lista': res,
+        'cnpj': cnpj
+    }
+
+    return render(request, 'editaUsuario.html', dados)
+
+def salvarUsuario(request):
+    cpf = request.POST.get('cpf')
+    nome = request.POST.get('nome')
+    cargo = request.POST.get('cargo')
+    setor = request.POST.get('setor')
+    cnpj = request.POST.get('cnpj')
+
+    updateUsuario(cpf, nome, cargo, setor)
+
+    res = getUsuarioEmpresa(cnpj)
+
+    dados = {
+        'lista': res,
+        'cnpj': cnpj
+    }
+
+    return render(request, 'usuariosEmpresa.html', dados)
+
+
+# ------------DELETE---------------
+def deleteUsuario(cpf:str):
+    sql = f"""delete from usuario where cpf = '{cpf}'; 
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            cursor.close()
+            return 
+        except Exception as e:
+            cursor.close()   
+
+def deletaUsuario(request):
+    cpf = request.POST.get('cpf')
+    cnpj = request.POST.get('cnpj')
+
+    deleteUsuario(cpf)
+
+    res = getUsuarioEmpresa(cnpj)
+
+    dados = {
+        'lista': res,
+        'cnpj': cnpj
+    }
+
+    return render(request, 'usuariosEmpresa.html', dados)
 
 # ----------Operador------------------
 

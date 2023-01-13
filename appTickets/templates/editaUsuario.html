@@ -1,0 +1,40 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-baseline">
+    <form action="{% url 'usuariosEmpresa' %}" method="post">
+        {% csrf_token %}      
+        <input type="hidden" name="cnpj" value="{{ cnpj }}">     
+        <button type="submit" class="btn fs-4"><i class="bi bi-arrow-left-square-fill"></i></button>
+    </form>
+    <h5 class="mt-5 mb-4">Edita Usuário</h5>
+</div>
+    {% for item in lista %}
+        <form action="{% url 'salvarUsuario' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="cnpj" value="{{ cnpj }}">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">CPF</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="cpf" value="{{item.cpf}}">
+                <div id="emailHelp" class="form-text">Não alterar</div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="exampleInputPassword1" name="nome" value="{{item.nome}}">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword2" class="form-label">Cargo</label>
+                <input type="text" class="form-control" id="exampleInputPassword2" name="cargo" value="{{item.cargo}}">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword3" class="form-label">Setor</label>
+                <input type="text" class="form-control" id="exampleInputPassword3" name="setor" value="{{item.setor}}">
+            </div>              
+            <button type="submit" class="btn btn-dark">Editar</button>
+        </form>
+    {% endfor %}
+   
+
+{% endblock %} 

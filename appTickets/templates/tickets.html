@@ -5,7 +5,7 @@
 <h1 class="mt-2">.</h1>
 <div class="d-flex align-items-baseline">
     <div>
-        <h3 class="mt-5">Usuários da Empresa</h3>
+        <h3 class="mt-5">Tickets</h3>
         <h5 class="mt-2 mb-4">{{cnpj}}</h5>
     </div>
     <button class="btn fs-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-plus-square-fill"></i></button>
@@ -16,20 +16,27 @@
             <table class="table table-striped">
                 <thead>
                     <tr class="p-3 mb-2 text-light bg-dark lh-1">
-                        <th class="">CPF</th>
-                        <th class="">Nome</th>
-                        <th class="">Cargo</th>
-                        <th class="">Setor</th>
-                        <th class="text-center" colspan="2">Ações</th>
+                        <th class="">Código</th>
+                        <th class="">Descrição</th>
+                        <th class="">Usuário</th>
+                        <th class="">Início</th>
+                        <th class="">Fim</th>
+                        <th class="text-center" colspan="3">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in lista %} 
                         <tr class="lh-1">
-                            <td class="">{{item.cpf}}</td> 
-                            <td class=" ">{{item.nome}}</td>
-                            <td class=" ">{{item.cargo}}</td>
-                            <td class=" ">{{item.setor}}</td>
+                            <td class="">{{item.cod_ticket}}</td> 
+                            <td class=" ">{{item.desc_problema}}</td>
+                            <td class=" ">{{item.usuario_cpf}}</td>
+                            <td class=" ">{{item.data_inicio}}</td>
+                            <td class=" ">{{item.data_fim}}</td>
+                            <form action="{% url 'verTicket' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="code" value="{{ item.cod_ticket }}">
+                                <td><button type="submit" class="btn"><i class="bi bi-box-arrow-up-right"></i></button></td>
+                            </form>
                             <form action="{% url 'editaUsuario' %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="cnpj" value="{{ cnpj }}">
