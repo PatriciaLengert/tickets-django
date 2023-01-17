@@ -33,16 +33,50 @@ def tickets(request):
     return render(request, 'tickets.html', dados)
 
 def getTicketCode(code:int):
-    sql = f"""SELECT *
-                FROM tickets t
-                left join infra i
-                    on t.cod_ticket = i.tickets_cod_ticket
-                left join hospedagem_site hs
-                    on t.cod_ticket = hs.tickets_cod_ticket
-                left join hospedagem_email he
-                    on t.cod_ticket = he.tickets_cod_ticket
-                where cod_ticket = {code}
-                order by cod_ticket
+    sql = f"""SELECT 
+                t.cod_ticket,
+                t.desc_problema,
+                date_format(t.data_inicio, '%d/%m/%Y %H:%i') as data_inicio,
+                date_format(t.data_fim, '%d/%m/%Y %H:%i') as data_fim,
+                u.cpf,
+                u.nome as nome_usuario,
+                u.cargo as cargo_usuario,
+                u.setor as setor_usuario,
+                o.matricula,
+                o.nome as operador,
+                o.cargo as cargo_operador,
+                o.telefone as telefone_operador,
+                ec.cnpj,
+                ec.nome as empresa_cliente,
+                ec.endereco,
+                ec.telefone as telefone_empresa,
+                i.*, 
+                hs.dominio as site_dominio,
+                hs.plano_hospedagem as site_plano_hospedagem,
+                hs.solucao as site_solucao,
+                he.endereco_emal,  
+                he.plano_hospedagem as email_plano_hospedagem,
+                he.solucao as email_solucao,
+                c.*
+            FROM tickets t
+            inner join operador_ticket ot
+                on ot.tickets_cod_ticket = t.cod_ticket
+            inner join operador o
+                on ot.operador_matricula = o.matricula
+            inner join usuario u
+                on u.cpf = t.usuario_cpf
+            inner join empresa_cliente ec
+                on ec.cnpj = u.empresa_cliente_cnpj
+            left join infra i
+                on t.cod_ticket = i.tickets_cod_ticket
+            left join hospedagem_site hs
+                on t.cod_ticket = hs.tickets_cod_ticket
+            left join hospedagem_email he
+                on t.cod_ticket = he.tickets_cod_ticket
+            left join cloud as c
+                on t.cod_ticket = c.tickets_cod_ticket
+            where cod_ticket = {code}
+            order by cod_ticket
             """        
     with connection.cursor() as cursor:
         try:
@@ -61,17 +95,22 @@ def verTickets(request):
 
     for t in ticket:
         if t['endereco_emal'] != None:
-            tipo = 'email'
-        elif t['dominio'] != None:
-            tipo = 'site'
+            tipo = 'Email'
+        elif t['site_dominio'] != None:
+            tipo = 'Site'
         elif t['sistema_op'] != None:
-            tipo = 'infra'
+            tipo = 'Infra'
+        elif t['end_ip'] != None:
+            tipo = 'Cloud'
         else:
             tipo = 'ST'
+    
+    dados = {
+        'ticket': ticket,
+        'tipo': tipo
+    }
 
-    print(tipo)
-
-    return redirect('/tickets')
+    return render(request, 'verTicket.html', dados)
 
 # ----------Empresa cliente------------------
 

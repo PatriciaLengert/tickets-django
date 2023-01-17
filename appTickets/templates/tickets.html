@@ -8,6 +8,7 @@
         <h3 class="mt-5">Tickets</h3>
         <h5 class="mt-2 mb-4">{{cnpj}}</h5>
     </div>
+    <!-- Implementar -->
     <button class="btn fs-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-plus-square-fill"></i></button>
 </div>
 <div class="row">
@@ -37,13 +38,15 @@
                                 <input type="hidden" name="code" value="{{ item.cod_ticket }}">
                                 <td><button type="submit" class="btn"><i class="bi bi-box-arrow-up-right"></i></button></td>
                             </form>
-                            <form action="{% url 'editaUsuario' %}" method="post">
+                            <form action="{% url 'tickets' %}" method="post">
+                                <!-- Implementar -->
                                 {% csrf_token %}
                                 <input type="hidden" name="cnpj" value="{{ cnpj }}">
                                 <input type="hidden" name="cpf" value="{{ item.cpf }}">
                                 <td><button type="submit" class="btn"><i class="bi bi-pencil-square"></i></button></td>
                             </form> 
-                            <form action="{% url 'deletaUsuario' %}" method="post">
+                            <form action="{% url 'tickets' %}" method="post">
+                                <!-- Implementar -->
                                 {% csrf_token %}
                                 <input type="hidden" name="cnpj" value="{{ cnpj }}">
                                 <input type="hidden" name="cpf" value="{{ item.cpf }}">
@@ -65,7 +68,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Adicionar novo Usuário</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Falta Fazer</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
