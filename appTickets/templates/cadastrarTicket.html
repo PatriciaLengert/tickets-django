@@ -1,0 +1,129 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-end mb-3">
+    <form action="{% url 'tickets' %}" method="post">   
+        {% csrf_token %} 
+        <button type="submit" class="btn fs-4"><i class="bi bi-arrow-left-square-fill"></i></button>
+    </form>
+    <h4>Informações do ticket</h4>
+</div>
+<form action="{% url 'salvarNovoTicket' %}" method="post">
+    {% csrf_token %}
+    <div>
+        <div class="row">
+            <div class="mb-3 col-8">
+                <label for="exampleInputEmail1" class="form-label">Descrição do problema</label>
+                <input  type="text" class="form-control bg-light bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="desc_problema" >
+            </div>
+            <div class="mb-3 col-2">
+                <label for="exampleInputPassword1" class="form-label">Data de ínicio</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputPassword1" name="data_inicio" >
+            </div>
+            <div class="mb-3 col-2">
+                <label for="exampleInputPassword2" class="form-label">Data de fim</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputPassword2" name="data_fim" >
+            </div>
+        </div>
+        <h6>Tipo do Ticket</h6>
+        <div class="d-flex">  
+            <div class="me-3">
+                <input type="radio" id="residencial" checked name="tipo" value="infra">
+                <label for="residencial">Infra</label>
+            </div>
+            <div class="mx-3">
+                <input type="radio" id="comercial" name="tipo" value="email">
+                <label for="comercial">Hospedagem E-mail</label>
+            </div>
+            <div class="mx-3">
+                <input type="radio" id="comercial" name="tipo" value="site">
+                <label for="comercial">Hospedagem Site</label>
+            </div>
+            <div class="mx-3">
+                <input type="radio" id="comercial" name="tipo" value="cloud">
+                <label for="comercial">Cloud</label>
+            </div>
+        </div> 
+        <div class="row mt-4">
+            <div class="mb-3 col-4">
+                <label for="exampleInputPassword1" class="form-label">Sistema Operacional | Endereço E-mail | Domínio | VM</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputPassword1" name="input1" >
+            </div>
+            <div class="mb-3 col-4">
+                <label for="exampleInputEmail1" class="form-label">Servidor| Plano hospedagem | Serviço</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="input2" >
+            </div>
+            <div class="mb-3 col-4">
+                <label for="exampleInputPassword2" class="form-label">Porta Switch | Solução | Endereço IP</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputPassword2" name="input3" >
+            </div>
+        </div>
+    </div>
+    <div>
+        <h5>Empresa</h5>
+        <div class="row">
+            <div class="mb-3 col-3">
+                <label for="exampleInputPassword1" class="form-label">CNPJ</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputPassword1" name="cnpj" >
+            </div>
+            <!-- <div class="mb-3 col-9">
+                <label for="exampleInputEmail1" class="form-label">Empresa Cliente</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="empresa_cliente" >
+            </div> -->
+        </div>
+        <!-- <div class="row">
+            <div class="mb-3 col-3">
+                <label for="exampleInputPassword2" class="form-label">Telefone</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputPassword2" name="telefone_empresa" >
+            </div>
+            <div class="mb-3 col-9">
+                <label for="exampleInputEmail1" class="form-label">Endereço</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="endereco" >
+            </div>
+        </div> -->
+        <h6>Usuário</h6>
+        <div class="row">
+            <div class="mb-3 col-2">
+                <label for="exampleInputPassword1" class="form-label">CPF</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputPassword1" name="cpf" >
+            </div>
+            <!-- <div class="mb-3 col-4">
+                <label for="exampleInputEmail1" class="form-label">Nome</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="nome_usuario" >
+            </div>
+            <div class="mb-3 col-3">
+                <label for="exampleInputPassword2" class="form-label">Cargo</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputPassword2" name="cargo_usuario" >
+            </div>
+            <div class="mb-3 col-3">
+                <label for="exampleInputEmail1" class="form-label">Setor</label>
+                <input  type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="setor_usuarior" >
+            </div> -->
+        </div>
+    </div>
+    <div class="row mb-5">
+        <h5>Operador</h5>
+        <div class="mb-3 col-1">
+            <label for="exampleInputEmail1" class="form-label">Matrícula</label>
+            <input  type="text" class="form-control bg-light bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="matricula" >
+        </div>
+        <!-- <div class="mb-3 col-5">
+            <label for="exampleInputPassword1" class="form-label">Operador</label>
+            <input  type="text" class="form-control bg-light" id="exampleInputPassword1" name="operador">
+        </div>
+        <div class="mb-3 col-3">
+            <label for="exampleInputPassword2" class="form-label">Cargo</label>
+            <input  type="text" class="form-control bg-light" id="exampleInputPassword2" name="cargo_operador" >
+        </div>
+        <div class="mb-3 col-3">
+            <label for="exampleInputPassword2" class="form-label">Telefone</label>
+            <input  type="text" class="form-control bg-light" id="exampleInputPassword2" name="telefone_operador" >
+        </div> -->
+    </div>
+    <button type="submit" class="btn btn-dark">Salvar</button>
+</form>
+   
+
+{% endblock %} 

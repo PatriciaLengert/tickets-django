@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db import connection
+from datetime import datetime
 
 def dictfetchall(cur): 
     desc = cur.description 
@@ -111,6 +112,69 @@ def verTickets(request):
     }
 
     return render(request, 'verTicket.html', dados)
+
+# ------------INSERT---------------
+def setTicket(desc_problema, cpf:str, data_inicio, data_fim: datetime):
+    sql = f"""INSERT INTO tickets (desc_problema, cpf, data_inicio, data_fim, )
+            VALUES ('{desc_problema}', "{cpf}", "{data_inicio}", "{data_fim}", ); 
+            """        
+    print(sql)
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            cursor.close()
+            return 
+        except Exception as e:
+            cursor.close()   
+
+def cadastraTicket(request):
+    return render(request, 'cadastrarTicket.html')
+
+def salvarNovoTicket(request):
+    desc_problema = request.POST.get('desc_problema')
+    data_inicio = request.POST.get('data_inicio')
+    data_fim = request.POST.get('data_fim')
+    cpf = request.POST.get('cpf')
+
+    data_i = datetime.strptime(data_inicio, "%Y-%m-%d %H:%M:%S").date()
+
+    data_f = datetime.strptime(data_fim, "%Y-%m-%d %H:%M:%S").date()
+
+    print(data_inicio)
+    setTicket(desc_problema, cpf, data_i, data_f )
+
+    infra = request.POST.get('infra')
+    email = request.POST.get('email')
+    site = request.POST.get('site')
+    cloud = request.POST.get('cloud')
+
+    input1 = request.POST.get('input1')
+    input2 = request.POST.get('input2')
+    input3 = request.POST.get('input3')
+
+    cnpj = request.POST.get('cnpj')
+    matricula = request.POST.get('matricula')
+
+    return render(request, 'cadastrarTicket.html')   
+
+# ------------DELETE---------------
+def deleteTicket(cod_ticket:str):
+    sql = f"""delete from ticket where cod_ticket = '{cod_ticket}'; 
+            """        
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            cursor.close()
+            return 
+        except Exception as e:
+            cursor.close()   
+
+def deletaTicket(request):
+    cod_ticket = request.POST.get('cod_ticket')
+
+    deleteTicket(cod_ticket)
+
+    return redirect('/tickets')
 
 # ----------Empresa cliente------------------
 

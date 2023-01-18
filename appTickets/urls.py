@@ -5,7 +5,10 @@ from . import views
 urlpatterns = [
     path('', views.tickets, name='tickets'),
     path('tickets', views.tickets, name='tickets'),
+    path('cadastrarTicket', views.cadastraTicket, name='cadastrarTicket'),
+    path('salvarNovoTicket', views.salvarNovoTicket, name='salvarNovoTicket'),
     path('verTicket', views.verTickets, name='verTicket'),
+    path('deletaTicket', views.deletaTicket, name='deletaTicket'),
     #empresa
     path('empresasClientes', views.empresaCliente, name='empresasClientes'),
     path('cadastraEmpresa', views.cadastraEmpresaCliente, name='cadastraEmpresa'),
