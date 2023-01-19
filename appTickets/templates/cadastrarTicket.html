@@ -14,17 +14,21 @@
     {% csrf_token %}
     <div>
         <div class="row">
-            <div class="mb-3 col-8">
+            <div class="mb-3 col-1">
+                <label for="exampleInputEmail1" class="form-label">Código</label>
+                <input type="number" class="form-control bg-light bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="cod_ticket" >
+            </div>
+            <div class="mb-3 col-7">
                 <label for="exampleInputEmail1" class="form-label">Descrição do problema</label>
                 <input  type="text" class="form-control bg-light bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="desc_problema" >
             </div>
             <div class="mb-3 col-2">
                 <label for="exampleInputPassword1" class="form-label">Data de ínicio</label>
-                <input  type="text" class="form-control bg-light" id="exampleInputPassword1" name="data_inicio" >
+                <input  type="datetime-local" class="form-control bg-light" id="exampleInputPassword1" name="data_inicio" >
             </div>
             <div class="mb-3 col-2">
                 <label for="exampleInputPassword2" class="form-label">Data de fim</label>
-                <input  type="text" class="form-control bg-light" id="exampleInputPassword2" name="data_fim" >
+                <input  type="datetime-local" class="form-control bg-light" id="exampleInputPassword2" name="data_fim" >
             </div>
         </div>
         <h6>Tipo do Ticket</h6>
@@ -103,7 +107,7 @@
             </div> -->
         </div>
     </div>
-    <div class="row mb-5">
+    <div class="row">
         <h5>Operador</h5>
         <div class="mb-3 col-1">
             <label for="exampleInputEmail1" class="form-label">Matrícula</label>
@@ -122,7 +126,7 @@
             <input  type="text" class="form-control bg-light" id="exampleInputPassword2" name="telefone_operador" >
         </div> -->
     </div>
-    <button type="submit" class="btn btn-dark">Salvar</button>
+    <button type="submit" class="btn btn-dark my-3">Salvar</button>
 </form>
    
 

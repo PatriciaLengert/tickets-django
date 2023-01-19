@@ -7,6 +7,8 @@ urlpatterns = [
     path('tickets', views.tickets, name='tickets'),
     path('cadastrarTicket', views.cadastraTicket, name='cadastrarTicket'),
     path('salvarNovoTicket', views.salvarNovoTicket, name='salvarNovoTicket'),
+    path('editaTicket', views.editaTicket, name='editaTicket'),
+    path('salvarTicket', views.salvarTicket, name='salvarTicket'),
     path('verTicket', views.verTickets, name='verTicket'),
     path('deletaTicket', views.deletaTicket, name='deletaTicket'),
     #empresa

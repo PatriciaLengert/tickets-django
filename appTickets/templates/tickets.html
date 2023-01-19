@@ -37,11 +37,9 @@
                                 <input type="hidden" name="code" value="{{ item.cod_ticket }}">
                                 <td><button type="submit" class="btn"><i class="bi bi-box-arrow-up-right"></i></button></td>
                             </form>
-                            <form action="{% url 'tickets' %}" method="post">
-                                <!-- Implementar -->
+                            <form action="{% url 'editaTicket' %}" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="cnpj" value="{{ cnpj }}">
-                                <input type="hidden" name="cpf" value="{{ item.cpf }}">
+                                <input type="hidden" name="cod_ticket" value="{{ item.cod_ticket }}">
                                 <td><button type="submit" class="btn"><i class="bi bi-pencil-square"></i></button></td>
                             </form> 
                             <form action="{% url 'deletaTicket' %}" method="post">
