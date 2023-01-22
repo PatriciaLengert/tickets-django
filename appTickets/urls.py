@@ -24,4 +24,7 @@ urlpatterns = [
     path('editaOperador', views.editaOperador, name='editaOperador'),
     path('salvarOperador', views.salvarOperador, name='salvarOperador'),
     path('deletaOperador', views.deletaOperador, name='deletaOperador'),
+    #enunciados
+    path('enunciados', views.enunciados, name='enunciados'),
+    path('enunciado01', views.enunciado01, name='enunciado01'),
 ]

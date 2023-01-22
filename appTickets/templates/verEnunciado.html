@@ -1,0 +1,159 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-end mb-3">
+    <form action="{% url 'tickets' %}" method="post">    
+        <button type="submit" class="btn fs-4"><i class="bi bi-arrow-left-square-fill"></i></button>
+    </form>
+    <h4>Informações do ticket</h4>
+</div>
+    {% for item in ticket %}
+        <form action="{% url 'salvarUsuario' %}" method="post">
+            {% csrf_token %}
+            <div>
+                <div class="row">
+                    <div class="mb-3 col-8">
+                        <label for="exampleInputEmail1" class="form-label">Descrição do problema</label>
+                        <input disabled type="text" class="form-control bg-light bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="desc_problema" value="{{item.desc_problema}}">
+                    </div>
+                    <div class="mb-3 col-2">
+                        <label for="exampleInputPassword1" class="form-label">Data de ínicio</label>
+                        <input disabled type="text" class="form-control bg-light" id="exampleInputPassword1" name="data_inicio" value="{{item.data_inicio}}">
+                    </div>
+                    <div class="mb-3 col-2">
+                        <label for="exampleInputPassword2" class="form-label">Data de fim</label>
+                        <input disabled type="text" class="form-control bg-light" id="exampleInputPassword2" name="data_fim" value="{{item.data_fim}}">
+                    </div>
+                </div>
+                <h6>Tipo do Ticket -> {{tipo}}</h6>
+                {% if tipo == 'Infra '%}
+                    <div class="row">
+                        <div class="mb-3 col-4">
+                            <label for="exampleInputPassword1" class="form-label">Sistema Operacional</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputPassword1" name="sistema_op" value="{{item.sistema_op}}">
+                        </div>
+                        <div class="mb-3 col-4">
+                            <label for="exampleInputEmail1" class="form-label">Servidor</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="servidor" value="{{item.servidor}}">
+                        </div>
+                        <div class="mb-3 col-4">
+                            <label for="exampleInputPassword2" class="form-label">Porta Switch</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputPassword2" name="porta_switch" value="{{item.porta_switch}}">
+                        </div>
+                    </div>
+                {% elif tipo == 'Email' %}
+                    <div class="row">
+                        <div class="mb-3 col-4">
+                            <label for="exampleInputPassword1" class="form-label">Endereço E-mail</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputPassword1" name="endereco_emal" value="{{item.endereco_emal}}">
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="exampleInputEmail1" class="form-label">Plano hospedagem</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="email_plano_hospedagem" value="{{item.email_plano_hospedagem}}">
+                        </div>
+                        <div class="mb-3 col-5">
+                            <label for="exampleInputPassword2" class="form-label">Solução</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputPassword2" name="email_solucao" value="{{item.email_solucao}}">
+                        </div>
+                    </div>
+                {% elif tipo == 'Site' %}
+                    <div class="row">
+                        <div class="mb-3 col-4">
+                            <label for="exampleInputPassword1" class="form-label">Domínio</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputPassword1" name="site_dominio" value="{{item.site_dominio}}">
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="exampleInputEmail1" class="form-label">Plano hospedagem</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="site_plano_hospedagem" value="{{item.site_plano_hospedagem}}">
+                        </div>
+                        <div class="mb-3 col-5">
+                            <label for="exampleInputPassword2" class="form-label">Solução</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputPassword2" name="site_solucao" value="{{item.site_solucao}}">
+                        </div>
+                    </div>
+                {% elif tipo == 'Cloud' %}
+                    <div class="row">
+                        <div class="mb-3 col-2">
+                            <label for="exampleInputPassword1" class="form-label">VM</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputPassword1" name="id_vm" value="{{item.id_vm}}">
+                        </div>
+                        <div class="mb-3 col-5">
+                            <label for="exampleInputEmail1" class="form-label">Serviço</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="servico" value="{{item.servico}}">
+                        </div>
+                        <div class="mb-3 col-5">
+                            <label for="exampleInputPassword2" class="form-label">Endereço IP</label>
+                            <input disabled type="text" class="form-control bg-light" id="exampleInputPassword2" name="end_ip" value="{{item.end_ip}}">
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div>
+                <h5>Empresa</h5>
+                <div class="row">
+                    <div class="mb-3 col-3">
+                        <label for="exampleInputPassword1" class="form-label">CNPJ</label>
+                        <input disabled type="text" class="form-control bg-light" id="exampleInputPassword1" name="cnpj" value="{{item.cnpj}}">
+                    </div>
+                    <div class="mb-3 col-9">
+                        <label for="exampleInputEmail1" class="form-label">Empresa Cliente</label>
+                        <input disabled type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="empresa_cliente" value="{{item.empresa_cliente}}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-3">
+                        <label for="exampleInputPassword2" class="form-label">Telefone</label>
+                        <input disabled type="text" class="form-control bg-light" id="exampleInputPassword2" name="telefone_empresa" value="{{item.telefone_empresa}}">
+                    </div>
+                    <div class="mb-3 col-9">
+                        <label for="exampleInputEmail1" class="form-label">Endereço</label>
+                        <input disabled type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="endereco" value="{{item.endereco}}">
+                    </div>
+                </div>
+                <h6>Usuário</h6>
+                <div class="row">
+                    <div class="mb-3 col-2">
+                        <label for="exampleInputPassword1" class="form-label">CPF</label>
+                        <input disabled type="text" class="form-control bg-light" id="exampleInputPassword1" name="cpf" value="{{item.cpf}}">
+                    </div>
+                    <div class="mb-3 col-4">
+                        <label for="exampleInputEmail1" class="form-label">Nome</label>
+                        <input disabled type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="nome_usuario" value="{{item.nome_usuario}}">
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="exampleInputPassword2" class="form-label">Cargo</label>
+                        <input disabled type="text" class="form-control bg-light" id="exampleInputPassword2" name="cargo_usuario" value="{{item.cargo_usuario}}">
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="exampleInputEmail1" class="form-label">Setor</label>
+                        <input disabled type="text" class="form-control bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="setor_usuarior" value="{{item.setor_usuario}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <h5>Operador</h5>
+                <div class="mb-3 col-1">
+                    <label for="exampleInputEmail1" class="form-label">Matrícula</label>
+                    <input disabled type="text" class="form-control bg-light bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="matricula" value="{{item.matricula}}">
+                </div>
+                <div class="mb-3 col-5">
+                    <label for="exampleInputPassword1" class="form-label">Operador</label>
+                    <input disabled type="text" class="form-control bg-light" id="exampleInputPassword1" name="operador" value="{{item.operador}}">
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="exampleInputPassword2" class="form-label">Cargo</label>
+                    <input disabled type="text" class="form-control bg-light" id="exampleInputPassword2" name="cargo_operador" value="{{item.cargo_operador}}">
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="exampleInputPassword2" class="form-label">Telefone</label>
+                    <input disabled type="text" class="form-control bg-light" id="exampleInputPassword2" name="telefone_operador" value="{{item.telefone_operador}}">
+                </div>
+            </div>
+            <!-- <button type="submit" class="btn btn-dark">Editar</button> -->
+        </form>
+    {% endfor %}
+   
+
+{% endblock %} 
