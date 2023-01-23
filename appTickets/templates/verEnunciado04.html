@@ -1,0 +1,50 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-end mb-3">
+    <form action="{% url 'enunciados' %}" method="post">   
+        {% csrf_token %}  
+        <button type="submit" class="btn fs-4"><i class="bi bi-arrow-left-square-fill"></i></button>
+    </form>
+    <h3>Enunciado 04</h3>
+
+</div>
+<div>
+
+    <p>Listar a quantidade de cada tipo de ticket que já foram criados. </p>
+
+    <h4>Código SQL</h4>
+    <p>SELECT
+        (SELECT COUNT(hospedagem_email.tickets_cod_ticket)  FROM hospedagem_email) as he,
+        (SELECT COUNT(hospedagem_site.tickets_cod_ticket) FROM hospedagem_site) as hs, 
+        (SELECT COUNT(infra.tickets_cod_ticket) FROM infra) as infra, 
+        (SELECT COUNT(cloud.tickets_cod_ticket) FROM cloud) as cloud; </p>
+</div>
+<h4>Resultado</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr class="p-3 mb-2 text-light bg-dark lh-1">
+                <th class="">Hospedagem de e-mail</th>
+                <th class="">Hospedagem de site</th>
+                <th class="">Infraestrutura</th>
+                <th class="">Cloud</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in lista %} 
+                <tr class="lh-1">
+                    <td class="">{{item.he}}</td> 
+                    <td class="">{{item.hs}}</td> 
+                    <td class="">{{item.infra}}</td> 
+                    <td class="">{{item.cloud}}</td> 
+                                        
+                </tr>
+            {% endfor %}
+       
+        </tbody>
+    </table>
+   
+
+{% endblock %} 

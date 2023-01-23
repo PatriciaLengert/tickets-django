@@ -1,0 +1,41 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-end mb-3">
+    <form action="{% url 'enunciados' %}" method="post">   
+        {% csrf_token %}  
+        <button type="submit" class="btn fs-4"><i class="bi bi-arrow-left-square-fill"></i></button>
+    </form>
+    <h3>Enunciado 03</h3>
+
+</div>
+<div>
+
+    <p>Listar o nome de todos os usuários que não abriram tickets para atendimento em hospedagem de e-mail.</p>
+
+    <h4>Código SQL</h4>
+    <p>SELECT usuario.nome from usuario
+        WHERE usuario.cpf NOT IN (SELECT tickets.usuario_cpf from tickets
+        WHERE tickets.cod_ticket in (SELECT hospedagem_email.tickets_cod_ticket FROM hospedagem_email));</p>
+</div>
+<h4>Resultado</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr class="p-3 mb-2 text-light bg-dark lh-1">
+                <th class="">Nome do usuário</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in lista %} 
+                <tr class="lh-1">
+                    <td class="">{{item.nome}}</td>
+                </tr>
+            {% endfor %}
+       
+        </tbody>
+    </table>
+   
+
+{% endblock %} 

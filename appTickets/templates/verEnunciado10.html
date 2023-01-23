@@ -1,0 +1,46 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-end mb-3">
+    <form action="{% url 'enunciados' %}" method="post">   
+        {% csrf_token %}  
+        <button type="submit" class="btn fs-4"><i class="bi bi-arrow-left-square-fill"></i></button>
+    </form>
+    <h3>Enunciado 10</h3>
+
+</div>
+<div>
+
+    <p> Listar o nome de todos os usuários e a quantidade de tickets abertos por cada um.</p>
+
+    <h4>Código SQL</h4>
+    <p>select usuario.nome, count(tickets.cod_ticket) as tickets from usuario
+        inner join tickets
+        on usuario.cpf=tickets.usuario_cpf
+        group by usuario.nome;
+        
+    </p>
+</div>
+<h4>Resultado</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr class="p-3 mb-2 text-light bg-dark lh-1">
+                <th class="">Nome do usuário</th>
+                <th class="">Tickets</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in lista %} 
+            <tr class="lh-1">
+                    <td class="">{{item.nome}}</td>  
+                    <td class="">{{item.tickets}}</td>      
+                </tr>
+            {% endfor %}
+       
+        </tbody>
+    </table>
+   
+
+{% endblock %} 

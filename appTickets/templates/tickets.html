@@ -3,13 +3,12 @@
 {% block content %} 
 
 <h1 class="mt-2">.</h1>
-<div class="d-flex align-items-baseline">
-    <div>
-        <h3 class="mt-5">Tickets</h3>
-        <h5 class="mt-2 mb-4">{{cnpj}}</h5>
-    </div>
-    <!-- Implementar -->
-    <button class="btn fs-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-plus-square-fill"></i></button>
+<div class="d-flex align-items-end">
+    <h3 class="mt-5">Tickets</h3>
+    <form action="{% url 'cadastrarTicket' %}" method="post">
+        {% csrf_token %}
+        <td><button type="submit" class="btn fs-3"><i class="bi bi-plus-square-fill"></i></button></td>
+    </form> 
 </div>
 <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -38,18 +37,14 @@
                                 <input type="hidden" name="code" value="{{ item.cod_ticket }}">
                                 <td><button type="submit" class="btn"><i class="bi bi-box-arrow-up-right"></i></button></td>
                             </form>
-                            <form action="{% url 'tickets' %}" method="post">
-                                <!-- Implementar -->
+                            <form action="{% url 'editaTicket' %}" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="cnpj" value="{{ cnpj }}">
-                                <input type="hidden" name="cpf" value="{{ item.cpf }}">
+                                <input type="hidden" name="cod_ticket" value="{{ item.cod_ticket }}">
                                 <td><button type="submit" class="btn"><i class="bi bi-pencil-square"></i></button></td>
                             </form> 
-                            <form action="{% url 'tickets' %}" method="post">
-                                <!-- Implementar -->
+                            <form action="{% url 'deletaTicket' %}" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="cnpj" value="{{ cnpj }}">
-                                <input type="hidden" name="cpf" value="{{ item.cpf }}">
+                                <input type="hidden" name="cod_ticket" value="{{ item.cod_ticket }}">
                                 <td><button type="submit" class="btn"><i class="bi bi-trash3-fill"></i></button></td>
                             </form>
                         </tr>
@@ -64,7 +59,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -99,6 +94,6 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
 {% endblock %} 

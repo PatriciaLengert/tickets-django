@@ -1,0 +1,61 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-end mb-3">
+    <form action="{% url 'enunciados' %}" method="post">   
+        {% csrf_token %}  
+        <button type="submit" class="btn fs-4"><i class="bi bi-arrow-left-square-fill"></i></button>
+    </form>
+    <h3>Enunciado 07</h3>
+
+</div>
+<div>
+
+    <p>Responda, utilizando uma consulta SQL, qual o ticket que demorou mais tempo para ser encerrado? Liste o nome da empresa, 
+        o usuário, o operador, a data de início e a data de encerramento.</p>
+
+    <h4>Código SQL</h4>
+    <p>SELECT empresa_cliente.nome as Empresa, usuario.nome as Usuario, operador.nome as Operador, tickets.data_inicio, tickets.data_fim FROM empresa_cliente
+        INNER JOIN usuario
+        ON usuario.empresa_cliente_cnpj=empresa_cliente.cnpj
+        INNER JOIN tickets
+        ON tickets.usuario_cpf=usuario.cpf
+        INNER JOIN operador_ticket
+        ON operador_ticket.tickets_cod_ticket=tickets.cod_ticket
+        INNER JOIN operador
+        ON operador.matricula=operador_ticket.operador_matricula
+        GROUP BY empresa_cliente.nome
+        HAVING  DATEDIFF(tickets.data_inicio, tickets.data_fim) =
+        (SELECT MIN(d.dif) FROM (SELECT DATEDIFF(tickets.data_inicio,tickets.data_fim) AS dif FROM tickets )as d);
+        </p>
+</div>
+<h4>Resultado</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr class="p-3 mb-2 text-light bg-dark lh-1">
+                <th class="">Nome da empresa</th>
+                <th class="">Nome do usuário</th>
+                <th class="">Nome do operador</th>
+                <th class="">Data de início</th>
+                <th class="">Data de encerramento</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in lista %} 
+                <tr class="lh-1">
+                    <td class="">{{item.Empresa}}</td> 
+                    <td class="">{{item.Usuario}}</td> 
+                    <td class="">{{item.Operador}}</td> 
+                    <td class="">{{item.data_inicio}}</td> 
+                    <td class="">{{item.data_fim}}</td> 
+                                                            
+                </tr>
+            {% endfor %}
+       
+        </tbody>
+    </table>
+   
+
+{% endblock %} 

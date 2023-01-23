@@ -1,0 +1,55 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-end mb-3">
+    <form action="{% url 'enunciados' %}" method="post">   
+        {% csrf_token %}  
+        <button type="submit" class="btn fs-4"><i class="bi bi-arrow-left-square-fill"></i></button>
+    </form>
+    <h3>Enunciado 05</h3>
+
+</div>
+<div>
+
+    <p> Listar o nome de cada empresa, o nome do operador que mais tickets atendeu daquela empresa e a quantidade de tickets atendidos.</p>
+
+    <h4>Código SQL</h4>
+    <p>SELECT n.nome, n.operador, MAX(n.t) as tickets FROM (select operador.nome as operador, empresa_cliente.nome, COUNT(tickets.cod_ticket) as t 
+        from empresa_cliente
+        inner join usuario
+        on empresa_cliente.cnpj=usuario.empresa_cliente_cnpj
+        INNER JOIN tickets
+        ON tickets.usuario_cpf=usuario.cpf
+        INNER JOIN operador_ticket
+        ON operador_ticket.tickets_cod_ticket=tickets.cod_ticket                    
+        INNER JOIN operador
+        ON operador.matricula=operador_ticket.operador_matricula                       
+        GROUP BY 1,2) as n
+        GROUP BY n.nome;</p>
+</div>
+<h4>Resultado</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr class="p-3 mb-2 text-light bg-dark lh-1">
+                <th class="">Nome da empresa</th>
+                <th class="">Nome do operador</th>
+                <th class="">Quantidade de tickets</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in lista %} 
+                <tr class="lh-1">
+                    <td class="">{{item.nome}}</td> 
+                    <td class="">{{item.operador}}</td> 
+                    <td class="">{{item.tickets}}</td> 
+                                        
+                </tr>
+            {% endfor %}
+       
+        </tbody>
+    </table>
+   
+
+{% endblock %} 

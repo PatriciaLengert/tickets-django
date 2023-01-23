@@ -15,40 +15,37 @@
                         <th class=""></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody>                   
                     <tr class="p-3 mb-2 text-light bg-light lh-1">
-                        <input type="hidden" name="enunciado" value="1">
-                        <a class="nav-link" href="enunciado01">Enunciado 01</a>
-                        </th>
-                    </tr>
-                    <tr class="p-3 mb-2 text-light bg-dark lh-1">
-                        <th class="">02) Busque qual(is) a(s) empresa(s) com o maior número de tickets já abertos. Listar o nome da empresa e a quantidade de tickets.</th>
+                        <a class="nav-link" href="verEnunciado01">Enunciado 01</a>
                     </tr>
                     <tr class="p-3 mb-2 text-light bg-light lh-1">
-                        <th class="">03) Listar o nome de todos os usuários que não abriram tickets para atendimento em hospedagem de e-mail.</th>
+                        <a class="nav-link" href="verEnunciado02">Enunciado 02</a>
                     </tr>
-                    <tr class="p-3 mb-2 text-light bg-dark lh-1">
-                        <th class="">04) Listar o tipo e a quantidade de cada tipo de ticket que já foram criados. Ordenar do maior para o menor. </th>
+                    <tr class="p-3 mb-2 text-light bg-light lh-1">
+                        <a class="nav-link" href="verEnunciado03">Enunciado 03</a>
                     </tr>
-
-                    {% for item in lista %} 
-                        <tr class="lh-1">
-                            <td class="">{{item.matricula}}</td> 
-                            <td class=" ">{{item.nome}}</td>
-                            <td class=" ">{{item.cargo}}</td>
-                            <td class=" ">{{item.telefone}}</td>
-                            <form action="{% url 'editaOperador' %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="matricula" value="{{ item.matricula }}">
-                                <td><button type="submit" class="btn"><i class="bi bi-pencil-square"></i></button></td>
-                            </form> 
-                            <form action="{% url 'deletaOperador' %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="matricula" value="{{ item.matricula }}">
-                                <td><button type="submit" class="btn"><i class="bi bi-trash3-fill"></i></button></td>
-                            </form>
-                        </tr>
-                    {% endfor %}
+                    <tr class="p-3 mb-2 text-light bg-light lh-1">
+                        <a class="nav-link" href="verEnunciado04">Enunciado 04</a>
+                    </tr>
+                    <tr class="p-3 mb-2 text-light bg-light lh-1">
+                        <a class="nav-link" href="verEnunciado05">Enunciado 05</a>
+                    </tr>
+                    <tr class="p-3 mb-2 text-light bg-light lh-1">
+                        <a class="nav-link" href="verEnunciado06">Enunciado 06</a>
+                    </tr>
+                    <tr class="p-3 mb-2 text-light bg-light lh-1">
+                        <a class="nav-link" href="verEnunciado07">Enunciado 07</a>
+                    </tr>
+                    <tr class="p-3 mb-2 text-light bg-light lh-1">
+                        <a class="nav-link" href="verEnunciado08">Enunciado 08</a>
+                    </tr>
+                    <tr class="p-3 mb-2 text-light bg-light lh-1">
+                        <a class="nav-link" href="verEnunciado09">Enunciado 09</a>
+                    </tr>
+                    <tr class="p-3 mb-2 text-light bg-light lh-1">
+                        <a class="nav-link" href="verEnunciado10">Enunciado 10</a>
+                                            </tr>              
                 </tbody>
             </table>
         </div>
