@@ -16,12 +16,12 @@
     <p> Listar o nome de todos os usuários e a quantidade de tickets abertos por cada um.</p>
 
     <h4>Código SQL</h4>
-    <p>select usuario.nome, count(tickets.cod_ticket) as tickets from usuario
-        inner join tickets
-        on usuario.cpf=tickets.usuario_cpf
-        group by usuario.nome;
-        
-    </p>
+    <pre>SELECT usuario.nome, count(tickets.cod_ticket) as tickets 
+FROM usuario
+INNER JOIN tickets
+    ON usuario.cpf=tickets.usuario_cpf
+GROUP BY usuario.nome;
+    </pre>
 </div>
 <h4>Resultado</h4>
     <table class="table table-striped">

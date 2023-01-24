@@ -16,11 +16,11 @@
     <p>Listar a quantidade de cada tipo de ticket que já foram criados. </p>
 
     <h4>Código SQL</h4>
-    <p>SELECT
-        (SELECT COUNT(hospedagem_email.tickets_cod_ticket)  FROM hospedagem_email) as he,
-        (SELECT COUNT(hospedagem_site.tickets_cod_ticket) FROM hospedagem_site) as hs, 
-        (SELECT COUNT(infra.tickets_cod_ticket) FROM infra) as infra, 
-        (SELECT COUNT(cloud.tickets_cod_ticket) FROM cloud) as cloud; </p>
+    <pre>SELECT
+(SELECT COUNT(hospedagem_email.tickets_cod_ticket) FROM hospedagem_email) as he,
+(SELECT COUNT(hospedagem_site.tickets_cod_ticket) FROM hospedagem_site) as hs, 
+(SELECT COUNT(infra.tickets_cod_ticket) FROM infra) as infra, 
+(SELECT COUNT(cloud.tickets_cod_ticket) FROM cloud) as cloud; </pre>
 </div>
 <h4>Resultado</h4>
     <table class="table table-striped">
@@ -39,7 +39,6 @@
                     <td class="">{{item.hs}}</td> 
                     <td class="">{{item.infra}}</td> 
                     <td class="">{{item.cloud}}</td> 
-                                        
                 </tr>
             {% endfor %}
        

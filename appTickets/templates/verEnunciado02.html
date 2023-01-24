@@ -1,7 +1,6 @@
 {% extends "index.html" %} 
 
 {% block content %} 
-
 <h1 class="mt-2">.</h1>
 <div class="d-flex align-items-end mb-3">
     <form action="{% url 'enunciados' %}" method="post">   
@@ -16,19 +15,23 @@
     <p>Busque qual(is) a(s) empresa(s) com o maior número de tickets já abertos. Listar o nome da empresa e a quantidade de tickets</p>
 
     <h4>Código SQL</h4>
-    <p>select empresa_cliente.nome, COUNT(tickets.cod_ticket) as quantidade from empresa_cliente
-        inner join usuario
-        on empresa_cliente.cnpj=usuario.empresa_cliente_cnpj
+    <pre>SELECT empresa_cliente.nome, COUNT(tickets.cod_ticket) as quantidade
+FROM empresa_cliente 
+INNER JOIN usuario
+    ON empresa_cliente.cnpj=usuario.empresa_cliente_cnpj
+INNER JOIN tickets
+    ON tickets.usuario_cpf=usuario.cpf
+GROUP BY empresa_cliente.nome
+HAVING COUNT(tickets.cod_ticket) = (
+    SELECT MAX(n.t) FROM (
+        SELECT empresa_cliente.nome, COUNT(tickets.cod_ticket) as t FROM empresa_cliente
+        INNER JOIN usuario
+            ON empresa_cliente.cnpj=usuario.empresa_cliente_cnpj
         INNER JOIN tickets
-        ON tickets.usuario_cpf=usuario.cpf
-        GROUP BY empresa_cliente.nome
-        HAVING COUNT(tickets.cod_ticket)=
-        (SELECT MAX(n.t) from (select empresa_cliente.nome,  COUNT(tickets.cod_ticket) as t from empresa_cliente
-        inner join usuario
-        on empresa_cliente.cnpj=usuario.empresa_cliente_cnpj
-        INNER JOIN tickets
-        ON tickets.usuario_cpf=usuario.cpf
-        GROUP BY empresa_cliente.nome) as n);</p>
+            ON tickets.usuario_cpf=usuario.cpf
+        GROUP BY empresa_cliente.nome) 
+    as n
+);</pre>
 </div>
 <h4>Resultado</h4>
     <table class="table table-striped">

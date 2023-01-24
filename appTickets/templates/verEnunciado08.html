@@ -12,15 +12,20 @@
 
 </div>
 <div>
-
     <p>Responda, utilizando uma consulta SQL, qual o tipo de sistema operacional teve mais tickets abertos? Liste o nome do sistema operacional e a quantidade de tickets.</p>
 
     <h4>Código SQL</h4>
-    <p>select infra.sistema_op, COUNT(infra.sistema_op) as tickets from infra
-        GROUP BY infra.sistema_op
-        HAVING COUNT(infra.sistema_op)=
-        (SELECT MAX(i.sis) FROM (SELECT COUNT(infra.sistema_op) AS sis FROM infra GROUP BY infra.sistema_op)as i);
-        </p>
+    <pre>SELECT infra.sistema_op, COUNT(infra.sistema_op) as tickets 
+FROM infra
+GROUP BY infra.sistema_op
+HAVING COUNT(infra.sistema_op) = (
+    SELECT MAX(i.sis) 
+    FROM (
+        SELECT COUNT(infra.sistema_op) AS sis 
+        FROM infra GROUP BY infra.sistema_op
+    )
+as i);
+    </pre>
 </div>
 <h4>Resultado</h4>
     <table class="table table-striped">
@@ -34,11 +39,7 @@
             {% for item in lista %} 
                 <tr class="lh-1">
                     <td class="">{{item.sistema_op}}</td> 
-                    <td class="">{{item.tickets}}</td> 
-                    <td class="">{{item.Operador}}</td> 
-                    <td class="">{{item.data_inicio}}</td> 
-                    <td class="">{{item.data_fim}}</td> 
-                                                            
+                    <td class="">{{item.tickets}}</td>                                                             
                 </tr>
             {% endfor %}
        

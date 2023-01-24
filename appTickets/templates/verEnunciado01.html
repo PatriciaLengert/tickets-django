@@ -16,8 +16,11 @@
     <p>Liste o nome de cada operador e a quantidade de tickets que ele já atendeu.</p>
 
     <h4>Código SQL</h4>
-    <p>SELECT o.nome, count(ot.tickets_cod_ticket) AS quantidade 
-        FROM operador o INNER JOIN operador_ticket ot	ON o.matricula = ot.operador_matricula GROUP BY 1</p>
+    <pre>SELECT o.nome, count(ot.tickets_cod_ticket) AS quantidade
+FROM operador o 
+INNER JOIN operador_ticket ot 
+    ON o.matricula = ot.operador_matricula 
+GROUP BY 1;</pre>
 </div>
 <h4>Resultado</h4>
     <table class="table table-striped">

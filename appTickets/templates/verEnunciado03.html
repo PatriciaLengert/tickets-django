@@ -16,9 +16,15 @@
     <p>Listar o nome de todos os usuários que não abriram tickets para atendimento em hospedagem de e-mail.</p>
 
     <h4>Código SQL</h4>
-    <p>SELECT usuario.nome from usuario
-        WHERE usuario.cpf NOT IN (SELECT tickets.usuario_cpf from tickets
-        WHERE tickets.cod_ticket in (SELECT hospedagem_email.tickets_cod_ticket FROM hospedagem_email));</p>
+    <pre>SELECT usuario.nome 
+FROM usuario
+WHERE usuario.cpf NOT IN (
+    SELECT tickets.usuario_cpf FROM tickets
+    WHERE tickets.cod_ticket in (
+        SELECT hospedagem_email.tickets_cod_ticket 
+        FROM hospedagem_email
+    )
+);</pre>
 </div>
 <h4>Resultado</h4>
     <table class="table table-striped">
@@ -33,7 +39,6 @@
                     <td class="">{{item.nome}}</td>
                 </tr>
             {% endfor %}
-       
         </tbody>
     </table>
    

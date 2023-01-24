@@ -16,17 +16,20 @@
     <p>Listar o nome de todas as empresas, quantos usuários que já abriram tickets essas empresas possuem e a quantidade de tickets abertos por cada empresa.</p>
 
     <h4>Código SQL</h4>
-    <p>SELECT n.nome, count(usuario.cpf) as usuarios, n.t as tickets FROM (select empresa_cliente.nome, empresa_cliente.cnpj, COUNT(tickets.cod_ticket) as t 
-        from empresa_cliente
-        inner join usuario
-        on empresa_cliente.cnpj=usuario.empresa_cliente_cnpj
-        INNER JOIN tickets
+    <pre>SELECT n.nome, count(usuario.cpf) as usuarios, n.t as tickets 
+FROM (
+    SELECT empresa_cliente.nome, empresa_cliente.cnpj, COUNT(tickets.cod_ticket) as t 
+    FROM empresa_cliente
+    INNER JOIN usuario
+        ON empresa_cliente.cnpj=usuario.empresa_cliente_cnpj
+    INNER JOIN tickets
         ON tickets.usuario_cpf=usuario.cpf
-        GROUP BY 1) as n
-        INNER JOIN usuario
-        ON usuario.empresa_cliente_cnpj=n.cnpj
-        GROUP BY n.nome;
-    </p>
+    GROUP BY 1
+) as n
+INNER JOIN usuario
+    ON usuario.empresa_cliente_cnpj=n.cnpj
+GROUP BY n.nome;
+    </pre>
 </div>
 <h4>Resultado</h4>
     <table class="table table-striped">

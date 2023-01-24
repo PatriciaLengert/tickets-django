@@ -17,19 +17,22 @@
         o usuário, o operador, a data de início e a data de encerramento.</p>
 
     <h4>Código SQL</h4>
-    <p>SELECT empresa_cliente.nome as Empresa, usuario.nome as Usuario, operador.nome as Operador, tickets.data_inicio, tickets.data_fim FROM empresa_cliente
-        INNER JOIN usuario
-        ON usuario.empresa_cliente_cnpj=empresa_cliente.cnpj
-        INNER JOIN tickets
-        ON tickets.usuario_cpf=usuario.cpf
-        INNER JOIN operador_ticket
-        ON operador_ticket.tickets_cod_ticket=tickets.cod_ticket
-        INNER JOIN operador
-        ON operador.matricula=operador_ticket.operador_matricula
-        GROUP BY empresa_cliente.nome
-        HAVING  DATEDIFF(tickets.data_inicio, tickets.data_fim) =
-        (SELECT MIN(d.dif) FROM (SELECT DATEDIFF(tickets.data_inicio,tickets.data_fim) AS dif FROM tickets )as d);
-        </p>
+    <pre>SELECT empresa_cliente.nome as Empresa, usuario.nome as Usuario, operador.nome as Operador, tickets.data_inicio, tickets.data_fim 
+FROM empresa_cliente
+INNER JOIN usuario
+    ON usuario.empresa_cliente_cnpj=empresa_cliente.cnpj
+INNER JOIN tickets
+    ON tickets.usuario_cpf=usuario.cpf
+INNER JOIN operador_ticket
+    ON operador_ticket.tickets_cod_ticket=tickets.cod_ticket
+INNER JOIN operador
+    ON operador.matricula=operador_ticket.operador_matricula
+GROUP BY empresa_cliente.nome
+HAVING DATEDIFF(tickets.data_inicio, tickets.data_fim) = (
+    SELECT MIN(d.dif) FROM (SELECT DATEDIFF(tickets.data_inicio,tickets.data_fim) AS dif 
+    FROM tickets 
+)as d);
+        </pre>
 </div>
 <h4>Resultado</h4>
     <table class="table table-striped">
@@ -50,7 +53,6 @@
                     <td class="">{{item.Operador}}</td> 
                     <td class="">{{item.data_inicio}}</td> 
                     <td class="">{{item.data_fim}}</td> 
-                                                            
                 </tr>
             {% endfor %}
        
