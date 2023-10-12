@@ -30,8 +30,8 @@
                             <td class="">{{item.cod_ticket}}</td> 
                             <td class=" ">{{item.desc_problema}}</td>
                             <td class=" ">{{item.usuario_cpf}}</td>
-                            <td class=" ">{{item.data_inicio}}</td>
-                            <td class=" ">{{item.data_fim}}</td>
+                            <td class=" ">{{item.fdata_inicio}}</td>
+                            <td class=" ">{{item.fdata_fim}}</td>
                             <form action="{% url 'verTicket' %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="code" value="{{ item.cod_ticket }}">

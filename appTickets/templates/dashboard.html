@@ -1,0 +1,58 @@
+{% extends "index.html" %} 
+
+{% block content %} 
+
+<h1 class="mt-2">.</h1>
+<div class="d-flex align-items-end">
+    <h3 class="mt-5 mb-2">Dashboard</h3>
+    <!-- <form action="{% url 'cadastrarTicket' %}" method="post">
+        {% csrf_token %}
+        <td><button type="submit" class="btn fs-3"><i class="bi bi-plus-square-fill"></i></button></td>
+    </form>  -->
+</div>
+<div class="row">
+    {% for item in lista %}
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class='mb-2 d-flex align-items-center p-2 border border-secondary rounded bg-light bg-opacity-10'>
+                <span class='mb-0 fs-2 fw-semibold p-0'>{{item.cloud}}</span>
+                <h2 class='mx-2'>|</h2>
+                <div class='d-flex flex-column'>
+                    <span class='fs-5 fw-semibold'>CLOUD</span>
+                    <span class=''>Descrição</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class='mb-2 d-flex align-items-center p-2 border border-secondary rounded bg-light bg-opacity-10'>
+                <span class='mb-0 fs-2 fw-semibold p-0'>{{item.infra}}</span>
+                <h2 class='mx-2'>|</h2>
+                <div class='d-flex flex-column'>
+                    <span class='fs-5 fw-semibold'>INFRAESTRUTURA</span>
+                    <span class=''>Descrição</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class='mb-2 d-flex align-items-center p-2 border border-secondary rounded bg-light bg-opacity-10'>
+                <span class='mb-0 fs-2 fw-semibold p-0'>{{item.hs}}</span>
+                <h2 class='mx-2'>|</h2>
+                <div class='d-flex flex-column'>
+                    <span class='fs-5 fw-semibold'>HOSPEDAGEM DE SITES</span>
+                    <span class=''>Descrição</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class='mb-2 d-flex align-items-center p-2 border border-secondary rounded bg-light bg-opacity-10'>
+                <span class='mb-0 fs-2 fw-semibold p-0'>{{item.he}}</span>
+                <h2 class='mx-2'>|</h2>
+                <div class='d-flex flex-column'>
+                    <span class='fs-5 fw-semibold'>HOSPEDAGEM DE E-MAIL</span>
+                    <span class=''>Descrição</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %} 
