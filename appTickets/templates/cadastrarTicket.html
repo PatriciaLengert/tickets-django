@@ -3,6 +3,9 @@
 {% block content %} 
 
 <h1 class="mt-2">.</h1>
+{% if controle %}
+    <h6 class="text-danger mt-3">Não foi possível realizar o cadastro. Tente novamente e se certifique de preencher todos os campos corretamente!</h6>
+{% endif %}
 <div class="d-flex align-items-end mb-3">
     <form action="{% url 'tickets' %}" method="post">   
         {% csrf_token %} 
@@ -69,8 +72,13 @@
         <h5>Empresa</h5>
         <div class="row">
             <div class="mb-3 col-3">
-                <label for="exampleInputPassword1" class="form-label">CNPJ</label>
-                <input  type="text" class="form-control bg-light" id="exampleInputPassword1" name="cnpj" >
+                <label for="exampleInputPassword1" class="form-label">Nome</label>
+                <select class="form-control bg-light" name="cnpj">
+                    {% for empresa in empresas %}
+                      <option value="{{empresa.cnpj}}">{{empresa.nome}}</option>
+                    {% endfor %}
+                </select>
+                <!-- <input  type="text" class="form-control bg-light" id="exampleInputPassword1" name="cnpj" > -->
             </div>
             <!-- <div class="mb-3 col-9">
                 <label for="exampleInputEmail1" class="form-label">Empresa Cliente</label>
@@ -90,8 +98,13 @@
         <h6>Usuário</h6>
         <div class="row">
             <div class="mb-3 col-2">
-                <label for="exampleInputPassword1" class="form-label">CPF</label>
-                <input  type="text" class="form-control bg-light" id="exampleInputPassword1" name="cpf" >
+                <label for="exampleInputPassword1" class="form-label">Nome</label>
+                <!-- <input  type="text" class="form-control bg-light" id="exampleInputPassword1" name="cpf" > -->
+                <select class="form-control bg-light" name="cpf">
+                    {% for usuario in usuarios %}
+                      <option value="{{usuario.cpf}}">{{usuario.nome}}</option>
+                    {% endfor %}
+                </select>
             </div>
             <!-- <div class="mb-3 col-4">
                 <label for="exampleInputEmail1" class="form-label">Nome</label>
@@ -109,9 +122,14 @@
     </div>
     <div class="row">
         <h5>Operador</h5>
-        <div class="mb-3 col-1">
-            <label for="exampleInputEmail1" class="form-label">Matrícula</label>
-            <input  type="text" class="form-control bg-light bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="matricula" >
+        <div class="mb-3 col-2">
+            <label for="exampleInputEmail1" class="form-label">Nome</label>
+            <!-- <input  type="text" class="form-control bg-light bg-light" id="exampleInputEmail1" aria-describedby="emailHelp" name="matricula" > -->
+            <select class="form-control bg-light" name="matricula">
+                {% for operador in operadores %}
+                  <option value="{{operador.matricula}}">{{operador.nome}}</option>
+                {% endfor %}
+            </select>
         </div>
         <!-- <div class="mb-3 col-5">
             <label for="exampleInputPassword1" class="form-label">Operador</label>

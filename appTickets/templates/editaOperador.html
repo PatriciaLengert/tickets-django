@@ -12,6 +12,7 @@
 </div>
     {% for item in lista %}
         <form action="{% url 'salvarOperador' %}" method="post">
+            <input type="hidden" name="acesso" value="{{item.acesso}}">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Matrícula</label>
@@ -29,7 +30,20 @@
             <div class="mb-3">
                 <label for="exampleInputPassword3" class="form-label">Telefone</label>
                 <input type="text" class="form-control" id="exampleInputPassword3" name="telefone" value="{{item.telefone}}">
-            </div>              
+            </div>   
+            {% if item.acesso == 0 %}     
+                <span class="mb-3">Caso queira criar um Login do sistema para o Operador, preencha os dados abaixo</span>  
+                <div class="mb-3">
+                    <label for="exampleInputPassword3" class="form-label">Login</label>
+                    <input type="text" class="form-control" id="exampleInputPassword3" name="login">
+                </div>        
+                <div class="mb-3">
+                    <label for="exampleInputPassword3" class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="exampleInputPassword3" name="senha">
+                </div>    
+            {% else %}   
+                <p class="mb-3">Operador já possui acesso!</p>  
+            {% endif %}
             <button type="submit" class="btn btn-dark">Editar</button>
         </form>
     {% endfor %}

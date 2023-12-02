@@ -5,50 +5,56 @@ from datetime import datetime
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
 
 def dictfetchall(cur):
     desc = cur.description
     return [dict(zip([col[0] for col in desc], row)) for row in cur.fetchall()]
 
+
 def user_login(request):
     if request.method == "GET":
         dados = {
-            'next': request.GET.get('next', ''),
+            "next": request.GET.get("next", ""),
         }
 
         return render(request, "login.html", dados)
     else:
-        username = request.POST.get('username')
-        senha = request.POST.get('senha')
+        username = request.POST.get("username")
+        senha = request.POST.get("senha")
 
-        next = request.POST.get('next')
-        
-        user = authenticate(request, username = username, password = senha)
+        next = request.POST.get("next")
+
+        user = authenticate(request, username=username, password=senha)
         if user:
             login(request, user)
             if next:
                 return redirect(next)
             else:
-                return redirect('/')
-        else: 
+                return redirect("/")
+        else:
             dados = {
-                'credenciais': 'false',
-                'next': request.GET.get('next', ''),
+                "credenciais": "false",
+                "next": request.GET.get("next", ""),
             }
 
             return render(request, "login.html", dados)
 
+
 def logout_view(request):
     logout(request)
-    return redirect('/login')
+    return redirect("/login")
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def dashboard(request):
     res = executaEnunciado04()
 
     dados = {"lista": res}
 
     return render(request, "dashboard.html", dados)
+
 
 def getTickets():
     sql = f"""select  
@@ -66,7 +72,8 @@ def getTickets():
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def tickets(request):
     ticket = getTickets()
 
@@ -134,11 +141,13 @@ def getTicketCode(code: int):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def verTickets(request):
     code = request.POST.get("code")
-
+    print("Code", code)
     ticket = getTicketCode(code)
+    print(ticket)
     tipo = ""
 
     for t in ticket:
@@ -169,9 +178,10 @@ def setTicket(
         try:
             cursor.execute(sql)
             cursor.close()
-            return
+            return True
         except Exception as e:
             cursor.close()
+            return False
 
 
 def setInfra(
@@ -243,11 +253,23 @@ def setOperadorTicket(cod_ticket, operador_matricula: int):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
-def cadastraTicket(request):
-    return render(request, "cadastrarTicket.html")
 
-@login_required(login_url='login')
+@login_required(login_url="login")
+def cadastraTicket(request):
+    operadores = getOperador()
+    usuarios = getUsuarios()
+    empresas = getEmpresaCliente()
+
+    dados = {
+        "empresas": empresas,
+        "usuarios": usuarios,
+        "operadores": operadores,
+    }
+
+    return render(request, "cadastrarTicket.html", dados)
+
+
+@login_required(login_url="login")
 def salvarNovoTicket(request):
     cod_ticket = request.POST.get("cod_ticket")
     desc_problema = request.POST.get("desc_problema")
@@ -255,42 +277,70 @@ def salvarNovoTicket(request):
     data_fim = request.POST.get("data_fim")
     cpf = request.POST.get("cpf")
 
-    data_inicio = datetime.strptime(data_inicio, "%Y-%m-%dT%H:%M")
-    data_fim = datetime.strptime(data_fim, "%Y-%m-%dT%H:%M")
+    try:
+        data_inicio = datetime.strptime(data_inicio, "%Y-%m-%dT%H:%M")
+        data_fim = datetime.strptime(data_fim, "%Y-%m-%dT%H:%M")
 
-    data_inicio = timezone.make_aware(data_inicio)
-    data_fim = timezone.make_aware(data_fim)
+        data_inicio = timezone.make_aware(data_inicio)
+        data_fim = timezone.make_aware(data_fim)
 
-    data_i = timezone.localtime(data_inicio)
-    data_f = timezone.localtime(data_fim)
+        data_i = timezone.localtime(data_inicio)
+        data_f = timezone.localtime(data_fim)
 
-    setTicket(cod_ticket, desc_problema, cpf, data_i, data_f)
+        print(cod_ticket, desc_problema, cpf, data_i, data_f)
 
-    tipo = request.POST.get("tipo")
+        response = setTicket(cod_ticket, desc_problema, cpf, data_i, data_f)
 
-    input1 = request.POST.get("input1")
-    input2 = request.POST.get("input2")
-    input3 = request.POST.get("input3")
+        if response:
+            tipo = request.POST.get("tipo")
 
-    if tipo == "infra":
-        print("Infra")
-        setInfra(input1, input2, input3, cod_ticket)
-    elif tipo == "email":
-        print("E-mail")
-        setHospEmail(input1, input2, input3, cod_ticket)
-    elif tipo == "site":
-        print("Site")
-        setHospSite(input1, input2, input3, cod_ticket)
-    elif tipo == "cloud":
-        print("Cloud")
-        setCloud(input1, input2, input3, cod_ticket)
+            input1 = request.POST.get("input1")
+            input2 = request.POST.get("input2")
+            input3 = request.POST.get("input3")
 
-    cnpj = request.POST.get("cnpj")
-    matricula = request.POST.get("matricula")
+            if tipo == "infra":
+                print("Infra")
+                setInfra(input1, input2, input3, cod_ticket)
+            elif tipo == "email":
+                print("E-mail")
+                setHospEmail(input1, input2, input3, cod_ticket)
+            elif tipo == "site":
+                print("Site")
+                setHospSite(input1, input2, input3, cod_ticket)
+            elif tipo == "cloud":
+                print("Cloud")
+                setCloud(input1, input2, input3, cod_ticket)
 
-    setOperadorTicket(cod_ticket, matricula)
+            cnpj = request.POST.get("cnpj")
+            matricula = request.POST.get("matricula")
 
-    return redirect("/tickets")
+            setOperadorTicket(cod_ticket, matricula)
+
+            return redirect("/tickets")
+        else:
+            operadores = getOperador()
+            usuarios = getUsuarios()
+            empresas = getEmpresaCliente()
+
+            dados = {
+                "empresas": empresas,
+                "usuarios": usuarios,
+                "operadores": operadores,
+                "controle": True,
+            }
+            return render(request, "cadastrarTicket.html", dados)
+    except:
+        operadores = getOperador()
+        usuarios = getUsuarios()
+        empresas = getEmpresaCliente()
+
+        dados = {
+            "empresas": empresas,
+            "usuarios": usuarios,
+            "operadores": operadores,
+            "controle": True,
+        }
+        return render(request, "cadastrarTicket.html", dados)
 
 
 # ------------UPDATE---------------
@@ -367,7 +417,8 @@ def updateCloud(id_vm: int, servico, end_ip: str, cod_ticket: int):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def salvarTicket(request):
     cod_ticket = request.POST.get("code")
     desc_problema = request.POST.get("desc_problema")
@@ -395,7 +446,8 @@ def salvarTicket(request):
 
     return redirect("/tickets")
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def editaTicket(request):
     cod_ticket = request.POST.get("cod_ticket")
 
@@ -431,7 +483,8 @@ def deleteTicket(cod_ticket: str):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def deletaTicket(request):
     cod_ticket = request.POST.get("cod_ticket")
 
@@ -456,7 +509,8 @@ def getEmpresaCliente():
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def empresaCliente(request):
     res = getEmpresaCliente()
 
@@ -478,7 +532,8 @@ def setEmpresaCliente(cnpj, nome, endereco, telefone: str):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def cadastraEmpresaCliente(request):
     cnpj = request.POST.get("cnpj")
     nome = request.POST.get("nome")
@@ -515,7 +570,8 @@ def getEmpresaClienteUpdate(cnpj: str):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def editaEmpresaCliente(request):
     cnpj = request.POST.get("cnpj")
 
@@ -525,7 +581,8 @@ def editaEmpresaCliente(request):
 
     return render(request, "editaEmpresaCliente.html", dados)
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def salvarEmpresaCliente(request):
     cnpj = request.POST.get("cnpj")
     nome = request.POST.get("nome")
@@ -549,7 +606,8 @@ def deleteEmpresaCliente(cnpj: str):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def deletaEmpresaCliente(request):
     cnpj = request.POST.get("cnpj")
 
@@ -560,6 +618,19 @@ def deletaEmpresaCliente(request):
 
 # ----------------Usuário---------------
 # ------------SELECT---------------
+def getUsuarios():
+    sql = f"""select * from usuario order by nome
+            """
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            rs = dictfetchall(cursor)
+            cursor.close()
+            return rs
+        except Exception as e:
+            cursor.close()
+
+
 def getUsuarioEmpresa(cnpj: str):
     sql = f"""select * from usuario where empresa_cliente_cnpj ='{cnpj}' order by nome
             """
@@ -572,7 +643,8 @@ def getUsuarioEmpresa(cnpj: str):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def usuariosEmpresa(request):
     cnpj = request.POST.get("cnpj")
     res = getUsuarioEmpresa(cnpj)
@@ -595,7 +667,8 @@ def setUsuario(cpf, nome, cargo, setor, cnpj: str):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def cadastraUsuario(request):
     cpf = request.POST.get("cpf")
     nome = request.POST.get("nome")
@@ -637,7 +710,8 @@ def getUsuarioUpdate(cpf: str):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def editaUsuario(request):
     cpf = request.POST.get("cpf")
     cnpj = request.POST.get("cnpj")
@@ -648,7 +722,8 @@ def editaUsuario(request):
 
     return render(request, "editaUsuario.html", dados)
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def salvarUsuario(request):
     cpf = request.POST.get("cpf")
     nome = request.POST.get("nome")
@@ -677,7 +752,8 @@ def deleteUsuario(cpf: str):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def deletaUsuario(request):
     cpf = request.POST.get("cpf")
     cnpj = request.POST.get("cnpj")
@@ -707,7 +783,8 @@ def getOperador():
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def operador(request):
     res = getOperador()
 
@@ -717,33 +794,64 @@ def operador(request):
 
 
 # ------------INSERT---------------
-def setOperador(matricula, nome, cargo, telefone: str):
-    sql = f"""INSERT INTO operador (matricula, nome, cargo, telefone)
-            VALUES ('{matricula}', "{nome}", "{cargo}", "{telefone}"); 
+def setOperador(matricula, nome, cargo, telefone, acesso):
+    sql = f"""INSERT INTO operador (matricula, nome, cargo, telefone, acesso)
+            VALUES ('{matricula}', "{nome}", "{cargo}", "{telefone}", {acesso}); 
             """
     with connection.cursor() as cursor:
         try:
+            print(sql)
             cursor.execute(sql)
             cursor.close()
             return
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def cadastraOperador(request):
     matricula = request.POST.get("matricula")
     nome = request.POST.get("nome")
     cargo = request.POST.get("cargo")
     telefone = request.POST.get("telefone")
 
-    setOperador(matricula, nome, cargo, telefone)
+    login = request.POST.get("login")
+    senha = request.POST.get("senha")
+
+    print("Criando usuário:", login, senha)
+    if (
+        login != None
+        and senha != None
+        and login != "None"
+        and senha != "None"
+        and login != ""
+        and senha != ""
+    ):
+        acesso = 1
+        novo_admin = User.objects.create_user(username=login, password=senha)
+        novo_admin.is_staff = True  # Defina como True para torná-lo administrador
+        # novo_admin.is_superuser = True  # Defina como True para dar privilégios de superusuário
+        novo_admin.save()
+    else:
+        acesso = 0
+
+    print(matricula, acesso)
+    if (
+        nome != None
+        and matricula != None
+        and nome != "None"
+        and matricula != "None"
+        and nome != ""
+        and matricula != ""
+    ):
+        setOperador(matricula, nome, cargo, telefone, acesso)
 
     return redirect("/operador")
 
 
 # ------------UPDATE---------------
-def updateOperador(matricula, nome, cargo, telefone: str):
-    sql = f"""update operador set nome = "{nome}", cargo = "{cargo}", telefone = "{telefone}" where matricula = '{matricula}'; 
+def updateOperador(matricula, nome, cargo, telefone, acesso):
+    sql = f"""update operador set nome = "{nome}", cargo = "{cargo}", telefone = "{telefone}", acesso = {acesso} where matricula = '{matricula}'; 
             """
     with connection.cursor() as cursor:
         try:
@@ -766,7 +874,8 @@ def getOperadorUpdate(matricula: str):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def editaOperador(request):
     matricula = request.POST.get("matricula")
 
@@ -776,15 +885,43 @@ def editaOperador(request):
 
     return render(request, "editaOperador.html", dados)
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def salvarOperador(request):
     matricula = request.POST.get("matricula")
     nome = request.POST.get("nome")
     cargo = request.POST.get("cargo")
     telefone = request.POST.get("telefone")
 
-    print(matricula)
-    updateOperador(matricula, nome, cargo, telefone)
+    acesso = request.POST.get("acesso")
+    login = request.POST.get("login")
+    senha = request.POST.get("senha")
+
+    if (
+        login != None
+        and senha != None
+        and login != "None"
+        and senha != "None"
+        and login != ""
+        and senha != ""
+    ):
+        acesso = 1
+        print("Criando usuário:", login, senha)
+        novo_admin = User.objects.create_user(username=login, password=senha)
+        novo_admin.is_staff = True  # Defina como True para torná-lo administrador
+        # novo_admin.is_superuser = True  # Defina como True para dar privilégios de superusuário
+        novo_admin.save()
+
+    print(matricula, acesso)
+    if (
+        nome != None
+        and matricula != None
+        and nome != "None"
+        and matricula != "None"
+        and nome != ""
+        and matricula != ""
+    ):
+        updateOperador(matricula, nome, cargo, telefone, acesso)
 
     return redirect("/operador")
 
@@ -801,7 +938,8 @@ def deleteOperador(matricula: str):
         except Exception as e:
             cursor.close()
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def deletaOperador(request):
     matricula = request.POST.get("matricula")
 
