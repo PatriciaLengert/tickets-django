@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+import requests
 
 
 def dictfetchall(cur):
@@ -514,7 +515,8 @@ def getEmpresaCliente():
 def empresaCliente(request):
     res = getEmpresaCliente()
 
-    dados = {"lista": res}
+    dados = {"lista": res,
+             "erro": False}
 
     return render(request, "empresaCliente.html", dados)
 
@@ -532,13 +534,35 @@ def setEmpresaCliente(cnpj, nome, endereco, telefone: str):
         except Exception as e:
             cursor.close()
 
+def obter_endereco_por_cep(cep):
+    url = f"https://viacep.com.br/ws/{cep}/json/"
+    resposta = requests.get(url)
+
+    if resposta.status_code == 200:
+        dados_endereco = resposta.json()
+        return dados_endereco
+    else:
+        return None
 
 @login_required(login_url="login")
 def cadastraEmpresaCliente(request):
     cnpj = request.POST.get("cnpj")
     nome = request.POST.get("nome")
     endereco = request.POST.get("endereco")
+    cep = request.POST.get("cep")
+    cep = cep.replace("-", "")
+    cep = cep.replace(".", "")
+    cep = cep.replace(" ", "")
+    cep_valido = obter_endereco_por_cep(cep)
     telefone = request.POST.get("telefone")
+
+    print(cep_valido)
+    if cep_valido == None:
+
+        res = getEmpresaCliente()
+        dados = {"lista": res,
+                 "erro": True}
+        return render(request, "empresaCliente.html", dados)
 
     setEmpresaCliente(cnpj, nome, endereco, telefone)
 
@@ -666,7 +690,6 @@ def setUsuario(cpf, nome, cargo, setor, cnpj: str):
             return
         except Exception as e:
             cursor.close()
-
 
 @login_required(login_url="login")
 def cadastraUsuario(request):

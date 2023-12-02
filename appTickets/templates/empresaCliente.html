@@ -2,11 +2,17 @@
 
 {% block content %} 
 
+
 <h1 class="mt-2">.</h1>
 <div class="d-flex align-items-baseline">
     <h3 class="mt-5 mb-4">Empresas Clientes</h3>
     <button class="btn fs-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-plus-square-fill"></i></button>
 </div>
+
+{% if erro == True %}
+    <p>Erro, o CEP informado deve ser um CEP válido!</p>
+{% endif %}
+
 <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div class="table-responsive">
@@ -67,6 +73,10 @@
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label">Nome</label>
                   <input type="text" class="form-control" id="exampleInputPassword1" name="nome">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword4" class="form-label">CEP</label>
+                    <input type="text" class="form-control" id="exampleInputPassword4" name="cep">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword2" class="form-label">Endereço</label>
